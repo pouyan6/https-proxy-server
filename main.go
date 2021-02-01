@@ -46,8 +46,8 @@ func handleTuneling(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 	}
 
-	go transferTo(destConn, clientConn)
-	go transferFrom(clientConn, destConn)
+	go transfer(destConn, clientConn)
+	go transfer(clientConn, destConn)
 
 }
 
@@ -69,19 +69,19 @@ func handleHTTP(w http.ResponseWriter, r *http.Request) {
 //--------------------------
 // 			Transfer Data
 //--------------------------
-func transferTo(destination io.WriteCloser, source io.ReadCloser) {
-	defer destination.Close()
-	defer source.Close()
-	// io.Copy(destination, source)
-	// if wt, ok := source.Read([]byte("asdasdasd"), ok {
-	// 	destination.Write(wt)
-	// }
+// func transferTo(destination io.WriteCloser, source io.ReadCloser) {
+// 	defer destination.Close()
+// 	defer source.Close()
+// 	// io.Copy(destination, source)
+// 	// if wt, ok := source.Read([]byte("asdasdasd"), ok {
+// 	// 	destination.Write(wt)
+// 	// }
 
-	size, _ := io.Copy(destination, source)
-	fmt.Println(size)
-}
+// 	size, _ := io.Copy(destination, source)
+// 	fmt.Println(size)
+// }
 
-func transferFrom(destination io.WriteCloser, source io.ReadCloser) {
+func transfer(destination io.WriteCloser, source io.ReadCloser) {
 	defer destination.Close()
 	defer source.Close()
 	io.Copy(destination, source)
