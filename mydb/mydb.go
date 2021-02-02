@@ -12,7 +12,6 @@ import (
 // Record is...
 type Record struct {
 	ReqURL string
-	Port   string
 }
 
 var dbConn *sql.DB
@@ -43,8 +42,7 @@ func Init() {
 func createTable() {
 	createStudentTableSQL := `CREATE TABLE traffic (
 		"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-		"url" TEXT,
-		"port" TEXT
+		"url" TEXT
 		);`
 	statement, err := dbConn.Prepare(createStudentTableSQL)
 	if err != nil {
@@ -62,13 +60,13 @@ func CloseDatabase() {
 // InsertRecord add a new record
 func InsertRecord(data Record) {
 	// log.Println("Inserting record ...")
-	insertDataSQL := `INSERT INTO traffic (url, port) VALUES (?,?)`
+	insertDataSQL := `INSERT INTO traffic (url) VALUES (?)`
 	statement, err := dbConn.Prepare(insertDataSQL) // Prepare statement.
 
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	_, err = statement.Exec(data.ReqURL, data.Port)
+	_, err = statement.Exec(data.ReqURL)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
